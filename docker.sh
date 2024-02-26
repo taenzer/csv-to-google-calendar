@@ -1,0 +1,1 @@
+docker run -it --rm --name my-running-script -v "$PWD":/var/www/html -p 8080:80 php:8-apache
