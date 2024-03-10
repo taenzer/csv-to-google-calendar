@@ -43,6 +43,12 @@
         <button onClick="nextEntry()">Nächster Eintrag</button>
 
         <!-- Ereignisanzeige -->
+        <div>
+
+            <h2>Eingetragene Termine am <span id="dtdisplay"></span></h2>
+            <div id="display"></div>
+
+        </div>
     </div>
     <script src="main.js"></script>
     <style>
