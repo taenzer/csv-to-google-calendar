@@ -1,13 +1,15 @@
-<?php 
+<?php
 header('Content-Type: application/json; charset=utf-8');
-if(!isset($_GET["date"])){
+if (!isset($_GET["date"])) {
     die("No date given");
 }
 $date = new DateTime($_GET["date"]);
-$dtStart = date("c", strtotime($date->format("Y-m-d")." 00:00:00"));
-$dtEnd = date("c", strtotime($date->format("Y-m-d")." 23:59:59"));
+//$date->modify("-1 day");
+$dtStart = date("c", strtotime($date->format("Y-m-d") . " 00:00:00"));
+$date->modify("+1 day");
+$dtEnd = date("c", strtotime($date->format("Y-m-d") . " 00:00:00"));
 
-
+// FIXME: Ganztägige Ereignisse werden nicht gelistet!
 require_once("./vendor/autoload.php");
 $calendarId = "72272fd34fbe8e954ac6740fa063f51be7b2bce01f73fa2d3a08964916756466@group.calendar.google.com";
 $client = new Google\Client();
@@ -27,6 +29,6 @@ foreach ($events->getItems() as $event) {
         "description" => $event->getDescription(),
         "repeat" => $event->getRecurrence(),
     );
-  }
+}
 
-  echo json_encode($result, JSON_PRETTY_PRINT);
+echo json_encode($result, JSON_PRETTY_PRINT);

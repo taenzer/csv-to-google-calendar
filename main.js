@@ -5,6 +5,49 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadEntry(dates, getCurrentEntry());
 });
 
+function sendToCalendar(){
+    const veranstaltung = document.getElementById("veranstaltung");
+    const datum = document.getElementById("datum");
+    const startzeit = document.getElementById("startzeit");
+    const endzeit = document.getElementById("endzeit");
+    const location = document.getElementById("location");
+    const beschreibung = document.getElementById("beschreibung");
+    const ganztag = document.getElementById("ganztag");
+    
+    const eventData = {
+      "titel": veranstaltung.value,
+      "date": datum.value,
+      "start": startzeit.value,
+      "end": endzeit.value,
+      "location": location.value,
+      "beschreibung": beschreibung.value,
+      "ganztag": ganztag.checked
+    };
+
+    fetch("/newEvent.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(eventData)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Success:", data);
+        displayCalendarEvents(datum.value);
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("Das hat nicht geklappt! Konsole prüfen!");
+        displayCalendarEvents(datum.value);
+      });
+
+}
+
+function dateChanged(){
+  displayCalendarEvents(document.getElementById("datum").value);
+}
+
 function loadEntry(data, index) {
   const veranstaltung = document.getElementById("veranstaltung");
   const datum = document.getElementById("datum");
@@ -30,12 +73,14 @@ function loadEntry(data, index) {
   location.value = data[index].information;
   beschreibung.value = data[index].veranstalter;
 
-  dtdisplay.innerHTML = formatDate(data[index].datum);
+  
   displayCalendarEvents(data[index].datum);
 }
 
 function displayCalendarEvents(date) {
-  display = document.getElementById("display");
+  const dtdisplay = document.getElementById("dtdisplay");
+  dtdisplay.innerHTML = formatDate(date);
+  const display = document.getElementById("display");
   display.innerHTML = "Lade...";
   fetch("/getEvents.php?date=" + date)
     .then((response) => response.json())
@@ -112,4 +157,10 @@ function formatDate(dateString, time = false) {
     return `${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes}`;
   }
   return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month}.${year}`;
+}
+
+function toggleGanztag(){
+  document.querySelectorAll(".hideGanztag").forEach((el) => {
+    el.style.display = document.getElementById("ganztag").checked ? "none" : "flex";
+  });
 }

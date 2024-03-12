@@ -12,20 +12,25 @@
     <div>
 
         <!-- Formular -->
-        <form action="#">
+        <form action="#" method="post">
             <p>
                 <label for="veranstaltung">Veranstaltungstitel</label>
                 <input type="text" name="veranstaltung" id="veranstaltung">
             </p>
             <p>
                 <label for="veranstaltung">Datum</label>
-                <input type="date" name="datum" id="datum">
+                <input type="date" onchange="dateChanged()" name="datum" id="datum">
             </p>
             <p>
+                <label for="ganztag">
+                    <input type="checkbox" name="ganztag" id="ganztag" onChange="toggleGanztag()"> Ganztägiges Ereignis
+                </label>
+            </p>
+            <p class="hideGanztag">
                 <label for="veranstaltung">Startzeit</label>
                 <input type="time" name="startzeit" id="startzeit">
             </p>
-            <p>
+            <p class="hideGanztag">
                 <label for="veranstaltung">Endzeit</label>
                 <input type="time" name="endzeit" id="endzeit">
             </p>
@@ -37,8 +42,9 @@
                 <label for="veranstaltung">Beschreibung</label>
                 <input type="text" name="beschreibung" id="beschreibung">
             </p>
-            <button>Eintragen</button>
+
         </form>
+        <button onclick="sendToCalendar()">Eintragen</button>
         <button onClick="prevEntry()">Vorheriger Eintrag</button>
         <button onClick="nextEntry()">Nächster Eintrag</button>
 
@@ -46,21 +52,22 @@
         <div>
 
             <h2>Eingetragene Termine am <span id="dtdisplay"></span></h2>
+            <p style="color: red">Achtung: Ganztägige Ereignisse werden hier nicht gelistet!</p>
             <div id="display"></div>
 
         </div>
     </div>
     <script src="main.js"></script>
     <style>
-    p {
-        display: flex;
-        flex-direction: column;
-    }
+        p {
+            display: flex;
+            flex-direction: column;
+        }
 
-    label {
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
     </style>
 </body>
 
