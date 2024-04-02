@@ -3,7 +3,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   const response = await fetch("/admin/get.php");
   dates = await response.json();
   loadEntry(dates, getCurrentEntry());
+  document.getElementById("countMax").innerHTML = dates.length;
 });
+
+function validateAllInputs() {
+  document
+    .getElementById("form")
+    .querySelectorAll(".validateAll")
+    .forEach((input) => {
+      validateMe(input);
+    });
+}
+function validateMe(obj) {
+  if (obj.value.length == 0) {
+    obj.classList.add("invalid");
+    console.log(obj, "INVALID");
+  } else {
+    obj.classList.remove("invalid");
+    console.log(obj, "VALID");
+  }
+}
 
 function sendToCalendar() {
   const veranstaltung = document.getElementById("veranstaltung");
@@ -54,15 +73,9 @@ function loadEntry(data, index) {
   const endzeit = document.getElementById("endzeit");
   const location = document.getElementById("location");
   const beschreibung = document.getElementById("beschreibung");
-  const dtdisplay = document.getElementById("dtdisplay");
+  const countDisplay = document.getElementById("countNow");
 
-  veranstaltung.value = data[index].veranstaltung;
-  datum.value = data[index].datum;
-  startzeit.value = data[index].startzeit;
-  endzeit.value = data[index].endzeit;
-  location.value = data[index].information;
-  beschreibung.value = data[index].veranstalter;
-
+  countDisplay.innerHTML = index + 1;
   date = new Date(data[index].datum);
 
   veranstaltung.value = data[index].veranstaltung;
@@ -70,16 +83,17 @@ function loadEntry(data, index) {
   startzeit.value = data[index].startzeit;
   endzeit.value = data[index].endzeit;
   location.value = data[index].information;
-  beschreibung.value = data[index].veranstalter;
+  beschreibung.value = "Veranstalter: " + data[index].veranstalter;
 
   displayCalendarEvents(data[index].datum);
+  validateAllInputs();
 }
 
 function displayCalendarEvents(date) {
   const dtdisplay = document.getElementById("dtdisplay");
   dtdisplay.innerHTML = formatDate(date);
   const display = document.getElementById("display");
-  display.innerHTML = "Lade...";
+  display.innerHTML = getLoader();
   fetch("/admin/getEvents.php?date=" + date)
     .then((response) => response.json())
     .then((data) => {
@@ -103,15 +117,28 @@ function displayCalendarEvents(date) {
     });
 }
 
+function getLoader() {
+  return (
+    '<p class="inline-flex  items-center px-4 py-2 font-semibold leading-6 text-sm  rounded-md bg-white"><svg class="-ml-1 mr-3 h-5 w-5 animate-spin text-indigo-500" xmlns="http://www.w3.org/2000/svg"' +
+    'fill="none" viewBox="0 0 24 24">' +
+    '<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>' +
+    '<path class="opacity-75" fill="currentColor"' +
+    'd="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">' +
+    "</path> </svg> Lade...</p>"
+  );
+}
+
 function calendarEntryHTML(title, start, end, location, description, repeat) {
   return `
-    <div style="padding: 10px; background: #dedede; margin-bottom: 20px;">
-      <h3 class="title" style="margin: 0 0 10px 0;">${title}</h3>
-      <div class="time"><strong>Von-Bis:</strong> ${formatDate(start, true)} - ${formatDate(end, true)}</div>
-      <div class="location"><strong>Location:</strong> ${location}</div>
-      <div class="description"><strong>Beschreibung:</strong> ${description}</div>
-      <div class="repeat"><strong>Wiederholend:</strong> ${repeat}</div>
-    </div>`;
+<div class="bg-white rounded px-4 py-2 mb-4">
+    <h3 class="text-lg font-semibold mb-2">${title}</h3>
+    <div class="time"><span class="border-b border-dotted border-current">Von-Bis:</span> ${formatDate(
+      start,
+      true
+    )} - ${formatDate(end, true)}</div>
+    <div class="location"><span class="border-b border-dotted border-current">Location:</span> ${location}</div>
+    <div class="description"><span class="border-b border-dotted border-current">Beschreibung:</span> ${description}</div>
+</div>`;
 }
 
 function nextEntry() {
@@ -126,7 +153,6 @@ function prevEntry() {
   setEntryInUrl(newEntry);
   loadEntry(dates, newEntry);
 }
-
 function getCurrentEntry() {
   var url = new URL(window.location.href);
   var entry = url.searchParams.get("entry");
@@ -135,10 +161,9 @@ function getCurrentEntry() {
     history.pushState(null, null, "?" + url.searchParams.toString());
     return 0;
   } else {
-    return entry;
+    return parseInt(entry);
   }
 }
-
 function setEntryInUrl(entryNr) {
   var url = new URL(window.location.href);
   url.searchParams.set("entry", entryNr);
@@ -156,7 +181,6 @@ function formatDate(dateString, time = false) {
   }
   return `${day < 10 ? "0" + day : day}.${month < 10 ? "0" + month : month}.${year}`;
 }
-
 function toggleGanztag() {
   document.querySelectorAll(".hideGanztag").forEach((el) => {
     el.style.display = document.getElementById("ganztag").checked ? "none" : "flex";
