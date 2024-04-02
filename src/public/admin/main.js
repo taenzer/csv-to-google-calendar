@@ -41,6 +41,7 @@ function newEvent() {
     information: "",
     veranstalter: "",
   });
+  setEntryInUrl(dates.length - 1);
   loadEntry(dates, dates.length - 1);
   document.getElementById("countMax").innerHTML = dates.length;
 }
