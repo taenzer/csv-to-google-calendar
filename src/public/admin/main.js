@@ -88,9 +88,15 @@ function sendToCalendar() {
     },
     body: JSON.stringify(eventData),
   })
-    .then((response) => response.json())
+    .then((response) => response.text())
 
     .then((data) => {
+      try {
+        data = JSON.parse(data);
+      } catch (e) {
+        console.error(e, data);
+        alert("Das hat nicht geklappt! Bitte Konsole überprüfen.");
+      }
       if (data.error) {
         alert("Das hat nicht geklappt! Bitte Konsole überprüfen.");
         console.error(data.error);

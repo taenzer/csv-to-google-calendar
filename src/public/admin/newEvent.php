@@ -42,12 +42,19 @@ if ($ganztag) {
     ];
     $end = $start;
 } else {
+    $startDt = new DateTime("$date {$decoded['start']}");
+    $endDt = new DateTime("$date {$decoded['end']}");
+
+    if($endDt < $startDt) {
+        $endDt->modify('+1 day');
+    }
+
     $start = [
-        'dateTime' => date('c', strtotime($date . ' ' . $decoded['start'])),
+        'dateTime' => $startDt->format('c'),
         'timeZone' => 'Europe/Berlin',
     ];
     $end = [
-        'dateTime' => date('c', strtotime($date . ' ' . $decoded['end'])),
+        'dateTime' => $endDt->format('c'),
         'timeZone' => 'Europe/Berlin',
     ];
 }
