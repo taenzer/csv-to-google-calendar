@@ -51,10 +51,10 @@ if ($ganztag) {
 }
 
 
-require_once("./vendor/autoload.php");
+require_once("../../vendor/autoload.php");
 
 $client = new Google\Client();
-$client->setAuthConfig("./client_secrets.json");
+$client->setAuthConfig("../../client_secrets.json");
 $client->setApplicationName("Client_Library_Examples");
 $client->setScopes(['https://www.googleapis.com/auth/calendar']);
 
