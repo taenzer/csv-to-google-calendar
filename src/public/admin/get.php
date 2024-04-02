@@ -3,7 +3,7 @@ header('Content-Type: application/json; charset=utf-8');
 ob_start(); // Workaround for AUTO_DETECT_LINE_ENDINGS Deprecation Warning
 ini_set('auto_detect_line_endings', true);
 ob_get_clean();
-$handle = fopen('veranstaltungsplan.csv', 'r');
+$handle = fopen('../../veranstaltungsplan.csv', 'r');
 $result = [];
 $entry = 0;
 

@@ -57,17 +57,17 @@
 
         </div>
     </div>
-    <script src="main.js"></script>
+    <script src="/admin/main.js"></script>
     <style>
-        p {
-            display: flex;
-            flex-direction: column;
-        }
+    p {
+        display: flex;
+        flex-direction: column;
+    }
 
-        label {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+    label {
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
     </style>
 </body>
 

@@ -10,10 +10,10 @@ $date->modify("+1 day");
 $dtEnd = date("c", strtotime($date->format("Y-m-d") . " 00:00:00"));
 
 // FIXME: Ganztägige Ereignisse werden nicht gelistet!
-require_once("./vendor/autoload.php");
+require_once("../../vendor/autoload.php");
 $calendarId = "72272fd34fbe8e954ac6740fa063f51be7b2bce01f73fa2d3a08964916756466@group.calendar.google.com";
 $client = new Google\Client();
-$client->setAuthConfig("./client_secrets.json");
+$client->setAuthConfig("../../client_secrets.json");
 $client->setApplicationName("Client_Library_Examples");
 $client->setScopes(['https://www.googleapis.com/auth/calendar']);
 
