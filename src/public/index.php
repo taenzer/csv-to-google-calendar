@@ -32,6 +32,7 @@
     <div class="max-w-5xl w-full flex justify-end gap-2 text-xs p-2 text-gray-400">
         <a href="https://www.tambach-dietharz.de/funktionsmenue/impressum" target="_blank">Impressum</a>
         <a href="/admin">Administration</a>
+        <p>Build #X</p>
     </div>
 </body>
 
