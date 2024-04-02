@@ -6,6 +6,45 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("countMax").innerHTML = dates.length;
 });
 
+function jumpToDateAlert() {
+  var date = prompt("Datum (yyyy-mm-dd):");
+  if (
+    !dates.find((entry, index) => {
+      if (entry.datum == date) {
+        setEntryInUrl(index);
+        loadEntry(dates, index);
+        return true;
+      } else {
+        return false;
+      }
+    })
+  ) {
+    alert("Es existiert kein Eintrag mit diesem Datum!");
+  }
+}
+function goToEntryAlert() {
+  var entry = parseInt(prompt("Eintrag Nr.:")) - 1;
+  if (entry < 0 || entry >= dates.length) {
+    alert("Eintrag existiert nicht!");
+    return;
+  }
+  setEntryInUrl(entry);
+  loadEntry(dates, entry);
+}
+
+function newEvent() {
+  dates.push({
+    veranstaltung: "",
+    datum: "",
+    startzeit: "",
+    endzeit: "",
+    information: "",
+    veranstalter: "",
+  });
+  loadEntry(dates, dates.length - 1);
+  document.getElementById("countMax").innerHTML = dates.length;
+}
+
 function validateAllInputs() {
   document
     .getElementById("form")
@@ -17,10 +56,8 @@ function validateAllInputs() {
 function validateMe(obj) {
   if (obj.value.length == 0) {
     obj.classList.add("invalid");
-    console.log(obj, "INVALID");
   } else {
     obj.classList.remove("invalid");
-    console.log(obj, "VALID");
   }
 }
 
