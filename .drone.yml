@@ -1,0 +1,28 @@
+---
+kind: pipeline
+name: default
+
+trigger:
+  event:
+    - push
+  branch:
+    - main
+steps:
+  - name: Create and upload Docker Image
+    image: plugins/docker
+    settings:
+      registry: registry.der-taenzer.net
+      username:
+        from_secret: REGISTRY_USER
+      password:
+        from_secret: REGISTRY_PASS
+      repo: registry.der-taenzer.net/tnz/eventverein-stadt-kalender
+      tags:
+        - latest
+        - build-${DRONE_BUILD_NUMBER}
+      dockerfile: ./Dockerfile
+      context: .
+  #- name: Refresh Docker Stack
+  #  image: plugins/webhook
+  #  settings:
+  #    urls: http://manager01.der-taenzer.net:9000/api/stacks/webhooks/543292b4-54cb-40e0-94f8-15cb8df825e6?BUILD_NR=${DRONE_BUILD_NUMBER}&BUILD_DATE=${DRONE_BUILD_CREATED}
