@@ -33,6 +33,7 @@
         <a href="https://www.tambach-dietharz.de/funktionsmenue/impressum" target="_blank">Impressum</a>
         <a href="/admin">Administration</a>
         <p>Build #<?= getenv("BUILD_NR"); ?></p>
+        <p>PHP v<?= phpversion() ?></p>
     </div>
 </body>
 
